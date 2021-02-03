@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "255045711067",
+    "project_id": "quizwithfirebase",
+    "storage_bucket": "quizwithfirebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:255045711067:android:86d6ebe800bbf3595d48fe",
+        "android_client_info": {
+          "package_name": "com.rinosystems.quizwithfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "255045711067-pnm5jadqhc1b9oj6ns6v80bmfr16cp59.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rinosystems.quizwithfirebase",
+            "certificate_hash": "056da744c2882c911d70f372f41430f9058cb65d"
+          }
+        },
+        {
+          "client_id": "255045711067-6tqb2gr08f84gsimlt7guue2a858ohlg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB57jt7WJEwUyZfd-_VF2Kyc_1DEpw7kiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "255045711067-6tqb2gr08f84gsimlt7guue2a858ohlg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

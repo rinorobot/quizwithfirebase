@@ -1,5 +1,6 @@
 package com.rinosystems.quizwithfirebase
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -50,6 +51,11 @@ class HomeActivity : AppCompatActivity() {
             override fun onBindViewHolder(holder: MyViewHolder, position: Int, model: Examen) {
 
                 holder.textView.text = model.getNombreExamen()
+                holder.v.setOnClickListener {
+                    val intent = Intent(this@HomeActivity,ViewActivity::class.java)
+                    intent.putExtra("ExamenKey",getRef(position).key)
+                    startActivity(intent)
+                }
 
             }
 

@@ -10,6 +10,8 @@ class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var imageView = itemView.findViewById<ImageView>(R.id.image_single_view)
     var textView = itemView.findViewById<TextView>(R.id.textView_single_view)
 
+    var v = itemView
+
 
 
 

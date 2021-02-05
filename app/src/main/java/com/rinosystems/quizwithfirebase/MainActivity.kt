@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        myDatabaseReference = FirebaseDatabase.getInstance().getReference().child("examenes")
+        myDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Examen")
 
         myDatabaseReference.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {

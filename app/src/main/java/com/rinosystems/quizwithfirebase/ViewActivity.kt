@@ -1,8 +1,11 @@
 package com.rinosystems.quizwithfirebase
 
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_view.*
 import kotlinx.android.synthetic.main.single_view.*
@@ -11,9 +14,15 @@ class ViewActivity : AppCompatActivity() {
 
     private lateinit var ref: DatabaseReference
     private lateinit var refPreguntas: DatabaseReference
-    val preguntas = mutableListOf<Pregunta>()
+  //  var preguntas = mutableListOf<Pregunta>()
+    var preguntas = ArrayList<Pregunta>()
 
-    var pregunta: Pregunta = Pregunta("","","","","","")
+
+    var pregunta: Pregunta = Pregunta("","","","","","","","","","","")
+
+    var index_question = 0
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +38,7 @@ class ViewActivity : AppCompatActivity() {
         ref.child(examenKey!!).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val nombre_examen = snapshot.child("nombre_examen").getValue().toString()
-              //  val preguntas = snapshot.child("preguntas").getValue().toString()
-
-               // Toast.makeText(this@ViewActivity,"Conexión exitosa",Toast.LENGTH_LONG).show()
-
-
-
-                image_single_view_Activity.text  = nombre_examen
+             //   image_single_view_Activity.text  = nombre_examen
 
             }
             override fun onCancelled(error: DatabaseError) {
@@ -47,17 +50,53 @@ class ViewActivity : AppCompatActivity() {
 
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                Toast.makeText(this@ViewActivity,"Conexión exitosa",Toast.LENGTH_LONG).show()
+
 
                 for (data in snapshot.children){
                     pregunta = data.getValue(Pregunta::class.java)!!
                     preguntas.add(pregunta)
+
                 }
 
-                pregunta_view_Activity.text = preguntas[0].getPregunta()+", "+preguntas[1].getPregunta()+", "+preguntas[2].getPregunta()
+                text_question.text = preguntas[index_question].getPregunta()
+                answer1.text = preguntas[index_question].getRespuestaA()
+                answer2.text = preguntas[index_question].getRespuestaB()
+                answer3.text = preguntas[index_question].getRespuestaC()
+                answer4.text = preguntas[index_question].getRespuestaD()
+
+                btn_check.setOnClickListener {
+                    index_question++
+                    text_question.text = preguntas[index_question].getPregunta()
+                    answer1.text = preguntas[index_question].getRespuestaA()
+                    answer2.text = preguntas[index_question].getRespuestaB()
+                    answer3.text = preguntas[index_question].getRespuestaC()
+                    answer4.text = preguntas[index_question].getRespuestaD()
+
+
+
+                }
+                btn_previus.setOnClickListener {
+                    index_question--
+                    text_question.text = preguntas[index_question].getPregunta()
+                    answer1.text = preguntas[index_question].getRespuestaA()
+                    answer2.text = preguntas[index_question].getRespuestaB()
+                    answer3.text = preguntas[index_question].getRespuestaC()
+                    answer4.text = preguntas[index_question].getRespuestaD()
+
+                }
+
+
+
+
+
+
+
+
+
             }
             override fun onCancelled(error: DatabaseError) {
-              //  Toast.makeText(this@ViewActivity,"No se encontró conexión",Toast.LENGTH_LONG).show()
+
+
             }
 
         })
@@ -69,6 +108,6 @@ class ViewActivity : AppCompatActivity() {
 
 
 
+ }
 
-    }
 }

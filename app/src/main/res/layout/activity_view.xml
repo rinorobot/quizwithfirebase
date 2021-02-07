@@ -6,25 +6,61 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_margin="15dp"
         tools:context=".ViewActivity">
 
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/image_single_view_Activity"
-            android:text="Examen"
-            android:textSize="25dp"
-            android:layout_margin="20dp"
-    />
+
 
     <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Question"
+            android:id="@+id/label_question"/>
+    <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/text_question"
+            android:textColor="@android:color/primary_text_light_nodisable" android:textSize="18sp"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginTop="5dp"
+    />
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp" app:srcCompat="@mipmap/ic_launcher_round" android:id="@+id/ivQuestion"/>
+    <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/pregunta_view_Activity"
-            android:text="Pregunta"
-            android:textSize="25dp"
-            android:layout_margin="20dp"
-    />
+            android:orientation="vertical" android:layout_marginTop="10dp"
+            android:id="@+id/answer_group">
+        <RadioButton
+                android:text="RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/answer1" android:layout_weight="1"/>
+        <RadioButton
+                android:text="RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/answer2" android:layout_weight="1"/>
+        <RadioButton
+                android:text="RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/answer3" android:layout_weight="1"/>
+        <RadioButton
+                android:text="RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/answer4" android:layout_weight="1"/>
+    </RadioGroup>
+    <Button
+            android:text="Next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/btn_check"/>
+    <Button
+            android:text="Previus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/btn_previus"/>
 
 
 

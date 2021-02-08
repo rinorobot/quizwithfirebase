@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/btn_check"/>
     <Button
-            android:text="Previus"
+            android:text="Anterior"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/btn_previus"/>
 

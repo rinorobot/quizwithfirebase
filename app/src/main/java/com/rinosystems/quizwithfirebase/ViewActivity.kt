@@ -1,21 +1,24 @@
 package com.rinosystems.quizwithfirebase
 
 import android.content.DialogInterface
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_view.*
 import kotlinx.android.synthetic.main.single_view.*
+import java.net.URI
 
 class ViewActivity : AppCompatActivity() {
 
     private lateinit var ref: DatabaseReference
     private lateinit var refPreguntas: DatabaseReference
-  //  var preguntas = mutableListOf<Pregunta>()
     var preguntas = ArrayList<Pregunta>()
 
 
@@ -25,10 +28,15 @@ class ViewActivity : AppCompatActivity() {
     var index_question = 0
     private val ids_answers = listOf(R.id.answer1,R.id.answer2,R.id.answer3,R.id.answer4)
     private lateinit var answer_is_correct : BooleanArray
-    private var correct_answer: Int=0
+
     private lateinit var answer : IntArray
     var preguntas_correctas : ArrayList<Int> = ArrayList()
     var preguntas_incorrectas : ArrayList<Int> = ArrayList()
+    var preguntas_no_contestadas : ArrayList<Int> = ArrayList()
+    var correctas : Int= 0
+    var incorrectas : Int = 0
+    var nocontestadas : Int = 0
+    var calif = 0.0
 
 
 
@@ -66,9 +74,7 @@ class ViewActivity : AppCompatActivity() {
 
                startOver()
 
-
-
-                btn_check.setOnClickListener {
+        btn_check.setOnClickListener {
                     checkAnswer(preguntas[index_question].getCorrecta().toInt())
                      if (index_question<preguntas.size-1){
                         index_question++
@@ -78,10 +84,7 @@ class ViewActivity : AppCompatActivity() {
 
                     }
 
-
-
-
-                }
+       }
                 btn_previus.setOnClickListener {
                     checkAnswer(preguntas[index_question].getCorrecta().toInt())
                     if (index_question>0){
@@ -93,82 +96,74 @@ class ViewActivity : AppCompatActivity() {
                 }
 
 
-
-
-
-
-
-
-
             }
-
-
-
-            override fun onCancelled(error: DatabaseError) {
-
-
-            }
+        override fun onCancelled(error: DatabaseError) {
+  }
 
         })
+}
 
 
-
-
-
-
-
-
- }
 
     private fun checkResults() {
-        var correctas = 0
-        var incorrectas = 0
-        var nocontestadas = 0
+
+        correctas = 0
+        incorrectas = 0
+        nocontestadas = 0
+
+
+
         for (i in 0..preguntas.size-1) {
-            if (answer_is_correct[i]) correctas++
-            else if (answer[i] == -1) nocontestadas++
-            else incorrectas++
+             if (answer_is_correct[i])    correctas++
+             else if (answer[i] == -1)    nocontestadas++
+                else incorrectas++
+
         }
 
+        calif = (correctas.toDouble()/preguntas.size.toDouble())*10
 
+       val builder = AlertDialog.Builder(this)
 
-        val builder = AlertDialog.Builder(this)
-
-        if (correctas>4) {
+        if (calif>=8) {
             builder.setIcon(R.drawable.icon_muy_bien)
-            builder?.setTitle("Muy bien")
+            builder.setTitle("Muy bien")
         }
-        else if (correctas<4&&correctas>2){
+        else if (calif<8&&calif>6){
             builder.setIcon(R.drawable.icon_regular)
-            builder?.setTitle("Puedes mejorar")
+            builder.setTitle("Puedes mejorar")
         }else{
             builder.setIcon(R.drawable.icon_mal)
-            builder?.setTitle("Estudiando puedes mejorar")
+            builder.setTitle("Estudiando puedes pasarlo")
         }
 
         for (i in 0..preguntas.size-1){
+            var respuesta = i
             if (answer_is_correct[i]==true){
-                var respuesta = i
+
                 preguntas_correctas.add(++respuesta)
             }
 
+
             if (answer_is_correct[i]==false){
-                var respuesta = i
+
                 preguntas_incorrectas.add(++respuesta)
             }
+
+            if (answer[i]== -1){
+                preguntas_no_contestadas.add(respuesta)
+            }
+
+
         }
 
 
 
 
-
-
-
-        builder.setMessage("Calificación: ${correctas}\n" +"Preguntas correctas: ${preguntas_correctas} \nPreguntas incorrectas: ${preguntas_incorrectas} \nPreguntas no contestadas: ${nocontestadas}")
+        builder.setMessage("Calificación: ${String.format("%.1f",calif)}"+"\nPreguntas correctas: ${preguntas_correctas} \nPreguntas incorrectas: ${preguntas_incorrectas} \nPreguntas no contestadas: ${preguntas_no_contestadas}")
 
         builder.setCancelable(false)//tal vez sea mejor quitarlo
 
-        builder?.setPositiveButton("Ver respuestas",DialogInterface.OnClickListener { dialog, which ->
+        builder.setPositiveButton("Ver respuestas",DialogInterface.OnClickListener { dialog, which ->
             finish()
 
         })
@@ -180,8 +175,10 @@ class ViewActivity : AppCompatActivity() {
         })
 
 
-        builder?.show()
+        builder.show()
     }
+
+
 
     private fun startOver() {
         answer_is_correct = BooleanArray(preguntas.size) //Poner en overstar
@@ -194,31 +191,25 @@ class ViewActivity : AppCompatActivity() {
 
         preguntas_correctas.clear()
         preguntas_incorrectas.clear()
+        preguntas_no_contestadas.clear()
         showQuestion()
     }
 
     private fun checkAnswer(correcta: Int) {
 
 
-        var id = answer_group.checkedRadioButtonId
+        val id = answer_group.checkedRadioButtonId
         var ans = -1
 
         for (i in 0..ids_answers.size-1){
             if (ids_answers[i] == id){
-                ans = i
+                ans = i+1
             }
         }
 
 
         answer_is_correct[index_question] = (ans==correcta)
         answer[index_question] = ans
-
-
-
-
-
-
-
 
 
     }
@@ -230,6 +221,14 @@ class ViewActivity : AppCompatActivity() {
         answer2.text = preguntas[index_question].getRespuestaB()
         answer3.text = preguntas[index_question].getRespuestaC()
         answer4.text = preguntas[index_question].getRespuestaD()
+
+        if (preguntas[index_question].getLinkPregunta()==""){
+            ivQuestion.visibility = View.GONE
+        }else{
+            ivQuestion.visibility = View.VISIBLE
+            Picasso.get().load(preguntas[index_question].getLinkPregunta()).into(ivQuestion)
+        }
+
 
 
         for (i in 0..ids_answers.size-1){

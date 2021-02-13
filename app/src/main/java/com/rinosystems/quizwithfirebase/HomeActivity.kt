@@ -1,10 +1,12 @@
 package com.rinosystems.quizwithfirebase
 
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
@@ -21,11 +23,17 @@ class HomeActivity : AppCompatActivity() {
     lateinit var adapter: FirebaseRecyclerAdapter<Examen,MyViewHolder>
     lateinit var dataRef: DatabaseReference
 
+    lateinit var loadingBar : ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         dataRef = FirebaseDatabase.getInstance().getReference().child("Examen")
+
+        loadingBar = ProgressDialog(this)
+        loadingBar.setMessage("Cargando lista de examenes")
+        loadingBar.show()
 
 
         recyclerView.layoutManager = LinearLayoutManager(applicationContext)
@@ -49,6 +57,8 @@ class HomeActivity : AppCompatActivity() {
 
         adapter = object: FirebaseRecyclerAdapter<Examen,MyViewHolder>(option){
             override fun onBindViewHolder(holder: MyViewHolder, position: Int, model: Examen) {
+
+                loadingBar.dismiss()
 
                 holder.textView.text = model.getNombreExamen()
                 holder.v.setOnClickListener {

@@ -1,5 +1,6 @@
 package com.rinosystems.quizwithfirebase
 
+import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -40,6 +41,8 @@ class ViewActivity : AppCompatActivity() {
 
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view)
@@ -55,6 +58,9 @@ class ViewActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val nombre_examen = snapshot.child("nombre_examen").getValue().toString()
                 label_question.text = nombre_examen
+
+
+
 
             }
             override fun onCancelled(error: DatabaseError) {
@@ -222,11 +228,17 @@ class ViewActivity : AppCompatActivity() {
         answer3.text = preguntas[index_question].getRespuestaC()
         answer4.text = preguntas[index_question].getRespuestaD()
 
+
+
         if (preguntas[index_question].getLinkPregunta()==""){
             ivQuestion.visibility = View.GONE
+
         }else{
+
+            
             ivQuestion.visibility = View.VISIBLE
             Picasso.get().load(preguntas[index_question].getLinkPregunta()).into(ivQuestion)
+
         }
 
 

@@ -223,23 +223,36 @@ class ViewActivity : AppCompatActivity() {
     fun showQuestion(){
         answer_group.clearCheck()
         text_question.text = preguntas[index_question].getPregunta()
-        answer1.text = preguntas[index_question].getRespuestaA()
+        ivQuestion.visibility = View.GONE
+        IVanswer1.visibility = View.GONE
+
+        if (preguntas[index_question].getRespuestaA()==""){
+            answer1.text = preguntas[index_question].getRespuestaA()
+            IVanswer1.visibility = View.VISIBLE
+            Picasso.get().load(preguntas[index_question].getLinkA()).into(IVanswer1)
+
+
+        }else{
+            answer1.text = preguntas[index_question].getRespuestaA()
+        }
+
+
+
+
         answer2.text = preguntas[index_question].getRespuestaB()
         answer3.text = preguntas[index_question].getRespuestaC()
         answer4.text = preguntas[index_question].getRespuestaD()
 
 
 
-        if (preguntas[index_question].getLinkPregunta()==""){
-            ivQuestion.visibility = View.GONE
-
-        }else{
-
-            
+        if (preguntas[index_question].getLinkPregunta()!=""){
             ivQuestion.visibility = View.VISIBLE
             Picasso.get().load(preguntas[index_question].getLinkPregunta()).into(ivQuestion)
 
+        }else{
+            ivQuestion.visibility = View.GONE
         }
+
 
 
 

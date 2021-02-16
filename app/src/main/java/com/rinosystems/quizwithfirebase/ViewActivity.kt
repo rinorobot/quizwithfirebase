@@ -12,8 +12,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_view.*
+import kotlinx.android.synthetic.main.activity_view.answer1
+import kotlinx.android.synthetic.main.activity_view.answer2
+import kotlinx.android.synthetic.main.activity_view.answer3
+import kotlinx.android.synthetic.main.activity_view.answer4
+import kotlinx.android.synthetic.main.activity_view.answer_group
+import kotlinx.android.synthetic.main.activity_view.btn_check
+import kotlinx.android.synthetic.main.activity_view.btn_previus
+import kotlinx.android.synthetic.main.activity_view.ivQuestion
+import kotlinx.android.synthetic.main.activity_view.label_question
+import kotlinx.android.synthetic.main.activity_view.text_question
 import kotlinx.android.synthetic.main.single_view.*
+import org.w3c.dom.Text
 import java.net.URI
 
 class ViewActivity : AppCompatActivity() {
@@ -225,8 +237,14 @@ class ViewActivity : AppCompatActivity() {
         text_question.text = preguntas[index_question].getPregunta()
         ivQuestion.visibility = View.GONE
         IVanswer1.visibility = View.GONE
+        IVanswer2.visibility = View.GONE
+        IVanswer3.visibility = View.GONE
+        IVanswer4.visibility = View.GONE
 
-        if (preguntas[index_question].getRespuestaA()==""){
+        //Para que aparezcan respuestas con texto y/o imagen
+
+        //Respuesta A)
+        if (preguntas[index_question].getLinkA()!=""){
             answer1.text = preguntas[index_question].getRespuestaA()
             IVanswer1.visibility = View.VISIBLE
             Picasso.get().load(preguntas[index_question].getLinkA()).into(IVanswer1)
@@ -235,17 +253,46 @@ class ViewActivity : AppCompatActivity() {
         }else{
             answer1.text = preguntas[index_question].getRespuestaA()
         }
+        //Respuesta B)
+        if (preguntas[index_question].getLinkB()!=""){
+            answer2.text = preguntas[index_question].getRespuestaB()
+            IVanswer2.visibility = View.VISIBLE
+            Picasso.get().load(preguntas[index_question].getLinkB()).into(IVanswer2)
+
+
+        }else{
+            answer2.text = preguntas[index_question].getRespuestaB()
+        }
+        //Respuesta C)
+        if (preguntas[index_question].getLinkC()!=""){
+            answer3.text = preguntas[index_question].getRespuestaC()
+            IVanswer3.visibility = View.VISIBLE
+            Picasso.get().load(preguntas[index_question].getLinkC()).into(IVanswer3)
+
+
+        }else{
+            answer3.text = preguntas[index_question].getRespuestaC()
+        }
+        //Respuesta D)
+        if (preguntas[index_question].getLinkD()!=""){
+            answer4.text = preguntas[index_question].getRespuestaD()
+            IVanswer4.visibility = View.VISIBLE
+            Picasso.get().load(preguntas[index_question].getLinkD()).into(IVanswer4)
+
+
+        }else{
+            answer4.text = preguntas[index_question].getRespuestaD()
+        }
 
 
 
 
-        answer2.text = preguntas[index_question].getRespuestaB()
-        answer3.text = preguntas[index_question].getRespuestaC()
-        answer4.text = preguntas[index_question].getRespuestaD()
+
 
 
 
         if (preguntas[index_question].getLinkPregunta()!=""){
+
             ivQuestion.visibility = View.VISIBLE
             Picasso.get().load(preguntas[index_question].getLinkPregunta()).into(ivQuestion)
 

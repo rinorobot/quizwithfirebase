@@ -34,27 +34,54 @@
             android:layout_height="200dp"
             app:srcCompat="@mipmap/ic_launcher_round"
             android:id="@+id/ivQuestion"/>
-    
-    
-  
+
+
+
+
+    <ScrollView
+            android:id="@+id/SVRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_weight="1"
+
+    >
+
+
     <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" android:layout_marginTop="10dp"
             android:id="@+id/answer_group">
+
+
         <RadioButton
                 android:text="RadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/answer1"
                 android:layout_weight="1"/>
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_weight="1"
+                android:id="@+id/IVanswer1"
+        />
 
+
+
+
+        <RadioButton
+                android:text="RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/answer2"
+                />
 
         <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="160dp"
                 android:layout_weight="1"
-                android:id="@+id/IVanswer1"
+                android:id="@+id/IVanswer2"
         />
 
 
@@ -63,21 +90,36 @@
                 android:text="RadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/answer2"
-                android:layout_weight="1"/>
-        <RadioButton
-                android:text="RadioButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/answer3"
                 android:layout_weight="1"/>
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_weight="1"
+                android:id="@+id/IVanswer3"
+        />
+
+
+
         <RadioButton
                 android:text="RadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/answer4"
                 android:layout_weight="1"/>
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_weight="1"
+                android:id="@+id/IVanswer4"
+        />
     </RadioGroup>
+
+    </ScrollView>
+
+
+
+
     <Button
             android:text="Next"
             android:layout_width="match_parent"

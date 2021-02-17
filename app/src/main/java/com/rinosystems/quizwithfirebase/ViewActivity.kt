@@ -221,13 +221,17 @@ class ViewActivity : AppCompatActivity() {
 
         for (i in 0..ids_answers.size-1){
             if (ids_answers[i] == id){
-                ans = i+1
+                ans = i
             }
         }
 
 
-        answer_is_correct[index_question] = (ans==correcta)
+
+
+        answer_is_correct[index_question] = (ans==(correcta-1))
         answer[index_question] = ans
+
+       // ans = -1
 
 
     }

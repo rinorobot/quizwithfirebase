@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
@@ -51,32 +52,51 @@ class HomeActivity : AppCompatActivity() {
 
         option = FirebaseRecyclerOptions.Builder<Examen>().setQuery(dataRef, object : SnapshotParser<Examen> {
             override fun parseSnapshot(snapshot: DataSnapshot): Examen {
-                return Examen(snapshot.child("nombre_examen").getValue().toString())
+                return Examen(snapshot.child("nombre_examen").getValue().toString(),snapshot.child("area").getValue().toString())
             }
         }).build()
 
         adapter = object: FirebaseRecyclerAdapter<Examen,MyViewHolder>(option){
+
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+
+                val v = LayoutInflater.from(parent.context).inflate(R.layout.single_view,parent,false)
+
+                return MyViewHolder(v)
+
+
+            }
+
+
             override fun onBindViewHolder(holder: MyViewHolder, position: Int, model: Examen) {
 
                 loadingBar.dismiss()
 
                 holder.textView.text = model.getNombreExamen()
+
                 holder.v.setOnClickListener {
                     val intent = Intent(this@HomeActivity,ViewActivity::class.java)
                     intent.putExtra("ExamenKey",getRef(position).key)
                     startActivity(intent)
                 }
 
+                if (model.getArea()=="mate"){
+                    holder.imageView.setImageResource(R.drawable.ic_matematicas)
+                }
+                if (model.getArea()=="expe"){
+                    holder.imageView.setImageResource(R.drawable.ic_experimentales)
+                }
+                if (model.getArea()=="historia"){
+                    holder.imageView.setImageResource(R.drawable.ic_historia)
+                }
+                if (model.getArea()=="talleres"){
+                    holder.imageView.setImageResource(R.drawable.ic_talleres)
+                }
+
+
             }
 
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 
-                var v = LayoutInflater.from(parent.context).inflate(R.layout.single_view,parent,false)
-
-                return MyViewHolder(v)
-
-
-            }
 
 
 

@@ -27,8 +27,8 @@ class PrincipalActivity : AppCompatActivity() {
     //Defined the required values
     companion object {
         const val CHANNEL_ID = "pulso_app_channel"
-        private const val CHANNEL_NAME= "Pulso App"
-        private const val CHANNEL_DESC = "Pulso App Notifications"
+       const val CHANNEL_NAME= "Pulso App"
+       const val CHANNEL_DESC = "Pulso App Notifications"
     }
     //Para la notificación
     private val FCM_API = "https://fcm.googleapis.com/fcm/send"
@@ -134,12 +134,7 @@ class PrincipalActivity : AppCompatActivity() {
         }
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
-            channel.description = CHANNEL_DESC
-            val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(channel)
-        }
+
 
 
     }

@@ -15,61 +15,54 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="202dp" />
+            android:layout_marginBottom="72dp"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintTop_toBottomOf="@+id/submit" />
 
     <ImageView
             android:layout_width="148dp"
             android:layout_height="0dp"
             app:srcCompat="@android:drawable/sym_def_app_icon"
             android:id="@+id/principal_profile_image"
-            android:layout_marginTop="105dp"
-            android:layout_marginBottom="176dp"
-            app:layout_constraintBottom_toTopOf="@+id/submit"
+            android:layout_marginTop="56dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="84dp" />
+            android:layout_marginStart="128dp" />
 
     <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/principal_fullname"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/principal_profile_image"
-            android:layout_marginEnd="38dp"
-            android:layout_marginBottom="403dp"
-            app:layout_constraintEnd_toEndOf="@+id/principal_profile_image" />
+            android:layout_marginEnd="40dp"
+            app:layout_constraintEnd_toEndOf="@+id/principal_profile_image"
+            android:layout_marginTop="56dp" />
 
     <Button
             android:text="Mis reportes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/principal_btn_misreportes"
-            app:layout_constraintStart_toStartOf="@+id/principal_fullname"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="7dp"
-            app:layout_constraintTop_toBottomOf="@+id/principal_profile_image"
-            android:layout_marginBottom="315dp" />
+            tools:layout_editor_absoluteX="145dp"
+            app:layout_constraintTop_toBottomOf="@+id/button_settings"
+            android:layout_marginTop="84dp" />
 
     <Button
             android:text="Settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/button_settings"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/principal_profile_image"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="92dp"
-            app:layout_constraintEnd_toEndOf="@+id/principal_button_logout" />
+            tools:layout_editor_absoluteX="160dp"
+            app:layout_constraintTop_toBottomOf="@+id/principal_fullname"
+            android:layout_marginTop="52dp" />
 
     <Button
-            android:text="Enviar"
+            android:text="Enviar notificación"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/submit"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/principal_profile_image"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="289dp"
-            app:layout_constraintEnd_toEndOf="@+id/principal_button_logout" />
+            tools:layout_editor_absoluteX="160dp"
+            app:layout_constraintTop_toBottomOf="@+id/principal_btn_misreportes"
+            android:layout_marginTop="76dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,9 @@ import org.json.JSONException
 import org.json.JSONObject
 
 class PrincipalActivity : AppCompatActivity() {
-
+    private val requestQueue: RequestQueue by lazy {
+        Volley.newRequestQueue(this.applicationContext)
+    }
     //Defined the required values
     companion object {
         const val CHANNEL_ID = "pulso_app_channel"
@@ -35,9 +37,7 @@ class PrincipalActivity : AppCompatActivity() {
     private val serverKey = "key=" + "AAAAO2HotNs:APA91bEwkUSlMrkFMNijyAcwJf4zAWwdVXciHhqzKlORF5ALWJsEtRHOmY0el5yTpFwe3reBYMRmiXA4167pWlUdnFnQvxnOhyF9HiGJnx4-M5KTguO-mFXw1KJrqTaTircNM3SJx1YN"
     private val contentType = "application/json"
 
-    private val requestQueue: RequestQueue by lazy {
-        Volley.newRequestQueue(this.applicationContext)
-    }
+
 
 
     lateinit var mAuth: FirebaseAuth
@@ -50,8 +50,10 @@ class PrincipalActivity : AppCompatActivity() {
         //Para el envío de notificaciones
 
         FirebaseMessaging.getInstance().subscribeToTopic("admins")
+
+
         submit.setOnClickListener {
-            val topic = "/topics/admins"
+            val topic = "admins"
             val notification = JSONObject()
             val notificationBody = JSONObject()
 
@@ -62,12 +64,14 @@ class PrincipalActivity : AppCompatActivity() {
                 notification.put("to",topic)
                 notification.put("data",notificationBody)
                 Log.e("TAG", "try")
-                sendNotification(notification)
+
 
 
             }catch (e: JSONException){
                 Log.e("TAG", "onCreate: " + e.message)
             }
+
+            sendNotification(notification)
 
         }
 
@@ -141,7 +145,7 @@ class PrincipalActivity : AppCompatActivity() {
 
     private fun   sendNotification(notification: JSONObject) {
         Log.e("TAG", "sendNotification")
-        val jsonObjectRequest = object : JsonObjectRequest(Request.Method.POST, FCM_API,notification,
+        val jsonObjectRequest = object : JsonObjectRequest(FCM_API,notification,
             Response.Listener<JSONObject> { response ->
                 Log.i("TAG", "onResponse: $response")
 
@@ -153,8 +157,8 @@ class PrincipalActivity : AppCompatActivity() {
 
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params.put("content-type","application/json")
-                params.put("authorization",serverKey)
+                params["Authorization"] = serverKey
+                params["Content-Type"] = contentType
                 return params
             }
         }

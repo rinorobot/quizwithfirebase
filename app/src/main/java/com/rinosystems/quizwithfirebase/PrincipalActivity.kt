@@ -23,15 +23,13 @@ import org.json.JSONException
 import org.json.JSONObject
 
 class PrincipalActivity : AppCompatActivity() {
+
     private val requestQueue: RequestQueue by lazy {
         Volley.newRequestQueue(this.applicationContext)
     }
-    //Defined the required values
-    companion object {
-        const val CHANNEL_ID = "pulso_app_channel"
-       const val CHANNEL_NAME= "Pulso App"
-       const val CHANNEL_DESC = "Pulso App Notifications"
-    }
+
+
+
     //Para la notificación
     private val FCM_API = "https://fcm.googleapis.com/fcm/send"
     private val serverKey = "key=" + "AAAAO2HotNs:APA91bEwkUSlMrkFMNijyAcwJf4zAWwdVXciHhqzKlORF5ALWJsEtRHOmY0el5yTpFwe3reBYMRmiXA4167pWlUdnFnQvxnOhyF9HiGJnx4-M5KTguO-mFXw1KJrqTaTircNM3SJx1YN"
@@ -49,11 +47,12 @@ class PrincipalActivity : AppCompatActivity() {
 
         //Para el envío de notificaciones
 
-        FirebaseMessaging.getInstance().subscribeToTopic("admins")
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/admins")
 
 
         submit.setOnClickListener {
-            val topic = "admins"
+            val topic = "/topics/admins"
+
             val notification = JSONObject()
             val notificationBody = JSONObject()
 
@@ -145,7 +144,7 @@ class PrincipalActivity : AppCompatActivity() {
 
     private fun   sendNotification(notification: JSONObject) {
         Log.e("TAG", "sendNotification")
-        val jsonObjectRequest = object : JsonObjectRequest(FCM_API,notification,
+        val jsonObjectRequest = object : JsonObjectRequest(FCM_API, notification,
             Response.Listener<JSONObject> { response ->
                 Log.i("TAG", "onResponse: $response")
 
@@ -165,6 +164,10 @@ class PrincipalActivity : AppCompatActivity() {
         requestQueue.add(jsonObjectRequest)
 
     }
+
+
+
+
 
     override fun onStart() {
         super.onStart()

@@ -28,15 +28,10 @@ class PrincipalActivity : AppCompatActivity() {
         Volley.newRequestQueue(this.applicationContext)
     }
 
-
-
     //Para la notificación
     private val FCM_API = "https://fcm.googleapis.com/fcm/send"
     private val serverKey = "key=" + "AAAAO2HotNs:APA91bEwkUSlMrkFMNijyAcwJf4zAWwdVXciHhqzKlORF5ALWJsEtRHOmY0el5yTpFwe3reBYMRmiXA4167pWlUdnFnQvxnOhyF9HiGJnx4-M5KTguO-mFXw1KJrqTaTircNM3SJx1YN"
     private val contentType = "application/json"
-
-
-
 
     lateinit var mAuth: FirebaseAuth
     lateinit var UsersRef: DatabaseReference
@@ -46,16 +41,11 @@ class PrincipalActivity : AppCompatActivity() {
         setContentView(R.layout.activity_principal)
 
         //Para el envío de notificaciones
-
         FirebaseMessaging.getInstance().subscribeToTopic("/topics/admins")
-
-
         submit.setOnClickListener {
             val topic = "/topics/admins"
-
             val notification = JSONObject()
             val notificationBody = JSONObject()
-
 
             try {
                 notificationBody.put("title","Nuevo reporte")
@@ -63,15 +53,10 @@ class PrincipalActivity : AppCompatActivity() {
                 notification.put("to",topic)
                 notification.put("data",notificationBody)
                 Log.e("TAG", "try")
-
-
-
             }catch (e: JSONException){
                 Log.e("TAG", "onCreate: " + e.message)
             }
-
             sendNotification(notification)
-
         }
 
 
@@ -84,32 +69,25 @@ class PrincipalActivity : AppCompatActivity() {
 
         val currentUser = mAuth.currentUser?.uid
 
-
-
-
         if (currentUser!=null) {
 
 
             UsersRef.child(currentUser).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-
-
                     if (snapshot.exists()) {
                         if (snapshot.hasChild("fullname")) {
-
                             val fullname = snapshot.child("fullname").value.toString()
                             principal_fullname.text = fullname
-
-
                         }
                         if (snapshot.hasChild("profileimage")) {
                             val image = snapshot.child("profileimage").value.toString()
                             Picasso.get().load(image).placeholder(R.drawable.ic_launcher_foreground)
                                 .into(principal_profile_image)
-                        } else {
-                            Toast.makeText(this@PrincipalActivity, "El usuario no existe", Toast.LENGTH_LONG).show()
                         }
 
+                    }
+                    else {
+                        Toast.makeText(this@PrincipalActivity, "El usuario no existe", Toast.LENGTH_LONG).show()
                     }
                 }
 

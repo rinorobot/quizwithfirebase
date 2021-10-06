@@ -14,56 +14,48 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            tools:src="@mipmap/ic_launcher_round"/>
-
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/settings_status"
-            android:hint="profile status"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/settings_profile_image"
-    />
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/settings_username"
-            android:hint="username"
-            android:layout_below="@+id/settings_status"
-            android:layout_marginTop="10dp"
-    />
+            tools:src="@mipmap/ic_launcher_round" />
 
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/settings_fullname"
-            android:hint="fullname"
-            android:layout_below="@+id/settings_username"
+            android:hint="Nombre completo"
             android:layout_marginTop="10dp"
-    />
+            android:layout_below="@+id/settings_profile_image" />
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/settings_numero_cuenta"
-            android:hint="30123456"
+            android:id="@+id/settings_cuenta"
+            android:hint="Número de cuenta"
             android:layout_below="@+id/settings_fullname"
             android:layout_marginTop="10dp"
     />
+
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/settings_dob"
-            android:hint="Fecha de nacimiento"
-            android:layout_below="@+id/settings_numero_cuenta"
+            android:id="@+id/settings_ocupation"
+            android:hint="Ocupación"
+            android:layout_below="@+id/settings_cuenta"
             android:layout_marginTop="10dp"
     />
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/settings_cellphone"
+            android:hint="Celular"
+            android:layout_below="@+id/settings_ocupation"
+            android:layout_marginTop="10dp"
+    />
+
 
     <Button
             android:id="@+id/update_account_settings_buttons"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_below="@id/settings_dob"
-            android:text="Update account settings"
+            android:layout_below="@id/settings_cellphone"
+            android:text="Actualizar datos"
             android:layout_marginTop="10dp"
 
     />

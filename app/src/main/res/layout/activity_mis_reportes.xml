@@ -35,7 +35,7 @@
             android:baselineAlignBottom="false"
             android:focusableInTouchMode="false"
             android:background="@color/colorPrimaryDark"
-            android:src="@android:drawable/ic_input_add"/>
+            android:src="@android:drawable/ic_input_add" />
 
 
 

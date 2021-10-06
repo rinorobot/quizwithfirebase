@@ -249,7 +249,7 @@ class SetupActivity : AppCompatActivity() {
             userMap.put("fullname",fullname)
             userMap.put("cellphone",cellphone)
             userMap.put("ocupation",ocupation)
-            userMap.put("status","Hola, estoy usando Pulso App")
+            userMap.put("status","Desconectado")
 
 
             if (nip_status==true){

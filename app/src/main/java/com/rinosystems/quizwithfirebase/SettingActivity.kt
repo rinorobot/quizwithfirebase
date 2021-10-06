@@ -6,7 +6,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -14,7 +13,6 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import kotlinx.android.synthetic.main.activity_principal.*
 import kotlinx.android.synthetic.main.activity_setting.*
 
 class SettingActivity : AppCompatActivity() {
@@ -46,20 +44,20 @@ class SettingActivity : AppCompatActivity() {
 
                     if (snapshot.exists()){
                         val myProfileImage = snapshot.child("profileimage").getValue().toString()
-                        val myCountry = snapshot.child("country").getValue().toString()
-                        val myDOP = snapshot.child("dop").getValue().toString()
+
                         val myFullname = snapshot.child("fullname").getValue().toString()
-                        val myGender = snapshot.child("gender").getValue().toString()
-                        val myStatus = snapshot.child("status").getValue().toString()
-                        val myUsername = snapshot.child("username").getValue().toString()
+                        val myCuenta = snapshot.child("cuenta").getValue().toString()
+                        val myCellphone = snapshot.child("cellphone").getValue().toString()
+                        val myOcupation = snapshot.child("ocupation").getValue().toString()
+
+
 
                         Picasso.get().load(myProfileImage).placeholder(R.drawable.ic_launcher_foreground).into(settings_profile_image)
 
-                        settings_username.setText(myUsername)
-                        settings_dob.setText(myDOP)
-                        settings_numero_cuenta.setText(myCountry)
                         settings_fullname.setText(myFullname)
-                        settings_status.setText(myStatus)
+                        settings_cuenta.setText(myCuenta)
+                        settings_cellphone.setText(myCellphone)
+                        settings_ocupation.setText(myOcupation)
 
                     }
 
@@ -89,47 +87,46 @@ class SettingActivity : AppCompatActivity() {
     }
 
     private fun UpdateAccountSettingsButton() {
-        val username = settings_username.text.toString()
-        val fullname = settings_fullname.text.toString()
-        val status = settings_status.text.toString()
-        val cuenta = settings_numero_cuenta.text.toString()
-        val dop = settings_dob.text.toString()
 
-        if (username.isEmpty()){
-            Toast.makeText(this,"Escribe tu username",Toast.LENGTH_LONG).show()
-        }
-        else if (fullname.isEmpty()){
-            Toast.makeText(this,"Escribe tu fullname",Toast.LENGTH_LONG).show()
-        }
-        else if (status.isEmpty()){
-            Toast.makeText(this,"Escribe tu status",Toast.LENGTH_LONG).show()
+        val fullname = settings_fullname.text.toString()
+        val cuenta = settings_cuenta.text.toString()
+        val ocupation = settings_ocupation.text.toString()
+        val cellphone = settings_cellphone.text.toString()
+
+
+
+        if (fullname.isEmpty()){
+            Toast.makeText(this,"Escribe tu nombre completo",Toast.LENGTH_LONG).show()
         }
         else if (cuenta.isEmpty()){
-            Toast.makeText(this,"Escribe tu cuenta",Toast.LENGTH_LONG).show()
+            Toast.makeText(this,"Escribe tu número de cuenta",Toast.LENGTH_LONG).show()
         }
-        else if (dop.isEmpty()){
-            Toast.makeText(this,"Escribe tu dop",Toast.LENGTH_LONG).show()
+        else if (ocupation.isEmpty()){
+            Toast.makeText(this,"Escribe tu ocupación",Toast.LENGTH_LONG).show()
         }
+        else if (cellphone.isEmpty()){
+            Toast.makeText(this,"Escribe tu número de celular",Toast.LENGTH_LONG).show()
+        }
+
         else
         {
             loadingBar.setTitle("Foto de perfil")
             loadingBar.setMessage("Por favor espera un momento en lo que se actualiza tu foto de perfil")
             loadingBar.setCanceledOnTouchOutside(true)
             loadingBar.show()
-            UpdateAccountInfo(username,fullname,status,cuenta,dop)
+            UpdateAccountInfo(fullname,cuenta,ocupation,cellphone)
         }
 
 
     }
 
-    private fun UpdateAccountInfo(username: String, fullname: String, status: String, cuenta: String, dop: String) {
+    private fun UpdateAccountInfo(fullname: String, cuenta: String, ocupation: String, cellphone: String) {
 
         val userMap = HashMap<String,Any>()
-        userMap.put("username",username)
         userMap.put("fullname",fullname)
-        userMap.put("status",status)
         userMap.put("cuenta",cuenta)
-        userMap.put("dop",dop)
+        userMap.put("ocupation",ocupation)
+        userMap.put("cellphone",cellphone)
 
         SettingsUserRef.updateChildren(userMap).addOnCompleteListener {
 

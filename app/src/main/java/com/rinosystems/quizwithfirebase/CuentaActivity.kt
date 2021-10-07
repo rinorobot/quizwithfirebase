@@ -8,5 +8,7 @@ class CuentaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cuenta)
+
+        //Es solo un comentario para ver que funciona github
     }
 }

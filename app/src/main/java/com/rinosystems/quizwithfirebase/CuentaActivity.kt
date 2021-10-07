@@ -10,5 +10,6 @@ class CuentaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_cuenta)
 
         //Es solo un comentario para ver que funciona github
+        //Esta es una segunda prueba
     }
 }

@@ -1,7 +1,9 @@
 package com.rinosystems.quizwithfirebase
 
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -112,6 +114,37 @@ class PrincipalActivity : AppCompatActivity() {
 
         button_settings.setOnClickListener {
             SendUserToSettingsActivity()
+        }
+
+        principal_button_delete.setOnClickListener {
+            val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+            builder.setTitle("¿Estás seguro que deseas eliminar tu cuenta?")
+            builder.setMessage("Los reportes y otros datos también se eliminarán")
+            builder.setPositiveButton("Sí",DialogInterface.OnClickListener { dialogInterface, i ->
+
+              //  FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(null)
+
+                FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener {
+
+                    if (it.isSuccessful){
+                        Toast.makeText(this,"Cuenta eliminada con éxito",Toast.LENGTH_LONG).show()
+                        val intent= Intent(this,LoginActivity::class.java)
+                        startActivity(intent)
+                    }else{
+
+                        Toast.makeText(this,"Para eliminar cuenta, vuelve a iniciar sesión. "+it.exception!!.message,Toast.LENGTH_LONG).show()
+
+                    }
+
+                }
+
+            })
+
+            builder.setNegativeButton("No",DialogInterface.OnClickListener { dialogInterface, i ->
+
+            })
+
+            builder.show()
         }
 
 

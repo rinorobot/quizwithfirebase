@@ -50,15 +50,18 @@
             android:layout_height="0dp"
             android:id="@+id/submit"
             android:layout_weight="1"
-
            />
     <Button
             android:text="Logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:id="@+id/principal_button_logout"
+            />
 
-
+    <Button
+            android:text="Eliminar cuenta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/principal_button_delete"
             />
 </androidx.appcompat.widget.LinearLayoutCompat>

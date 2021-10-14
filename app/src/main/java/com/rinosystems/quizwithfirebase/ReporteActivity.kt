@@ -147,7 +147,7 @@ class ReporteActivity : AppCompatActivity() {
                     reporteMap.put("ubicacion",ubicacion)
                     reporteMap.put("profileimage",userProfileImage)
                     reporteMap.put("fullname",userFullName)
-                    reporteMap.put("status","no especificado")
+                    reporteMap.put("status","Pendiente")
 
                     ReportesRef.child(current_user_id+reporteRandomName).updateChildren(reporteMap).addOnCompleteListener {
                         if (it.isSuccessful){

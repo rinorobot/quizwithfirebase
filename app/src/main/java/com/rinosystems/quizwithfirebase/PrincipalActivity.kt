@@ -122,7 +122,7 @@ class PrincipalActivity : AppCompatActivity() {
             builder.setMessage("Los reportes y otros datos también se eliminarán")
             builder.setPositiveButton("Sí",DialogInterface.OnClickListener { dialogInterface, i ->
 
-              //  FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(null)
+                FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(null)
 
                 FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener {
 

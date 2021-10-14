@@ -54,11 +54,13 @@ class MisReportesActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
                     ocupation = snapshot.child("ocupation").getValue().toString()
-                    Toast.makeText(this@MisReportesActivity,ocupation,Toast.LENGTH_LONG).show()
+
                     if (ocupation.equals("Administrador de app")){
-                        DisplayAdminReports()
-                    }else{
                         DisplayAllReports()
+
+                    }else{
+
+                        DisplayAdminReports()
                     }
 
           }
@@ -142,13 +144,7 @@ class MisReportesActivity : AppCompatActivity() {
 
 
     private fun DisplayAdminReports() {
-
-
-
         val ref = ReportsRef.orderByChild("uid").startAt(currentUserID).endAt(currentUserID+"\uf8ff")
-
-
-
 
         options = FirebaseRecyclerOptions.Builder<Reportes>()
             .setQuery(ref, Reportes::class.java)

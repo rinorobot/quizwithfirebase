@@ -5,9 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -18,12 +16,17 @@ class ClikReportActivity : AppCompatActivity() {
 
     private var ReportKey: String? = null
     private lateinit var ClickReportRef: DatabaseReference
+    private lateinit var UsersRef: DatabaseReference
     private lateinit var mAuth: FirebaseAuth
     private lateinit var currentUserID: String
     private lateinit var databaseUserID: String
     private lateinit var description: String
     private lateinit var ubication: String
     private lateinit var image: String
+    private lateinit var status: String
+    var ocupation: String? = null
+    var estado = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +36,8 @@ class ClikReportActivity : AppCompatActivity() {
         currentUserID = mAuth.currentUser!!.uid
 
         ReportKey = intent.getStringExtra("ReportKey")
+        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users")
+
         ClickReportRef = FirebaseDatabase.getInstance().getReference().child("Reportes").child(ReportKey!!)
 
         delete_report_button.visibility = View.INVISIBLE
@@ -46,6 +51,7 @@ class ClikReportActivity : AppCompatActivity() {
                 ubication = snapshot.child("ubicacion").getValue().toString()
                 image = snapshot.child("reporteImage").getValue().toString()
                 databaseUserID = snapshot.child("uid").getValue().toString()
+                status = snapshot.child("status").getValue().toString()
 
                 click_report_description.text = description
                 click_report_ubication.text = ubication
@@ -54,10 +60,11 @@ class ClikReportActivity : AppCompatActivity() {
                 if (currentUserID.equals(databaseUserID)){
                     delete_report_button.visibility = View.VISIBLE
                     edit_repot_button.visibility = View.VISIBLE
+
                 }
 
                 edit_repot_button.setOnClickListener {
-                    EditCurrentReport(description,ubication)
+                    EditCurrentReport(description,ubication,status)
                 }
 
             }
@@ -73,9 +80,24 @@ class ClikReportActivity : AppCompatActivity() {
             DeteleCurrentReport()
         }
 
+
+        //Para mostrar o quitar el status dependiendo de la ocupación
+        UsersRef.child(currentUserID).addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    ocupation = snapshot.child("ocupation").getValue().toString()
+                    click_report_status.text = "Status: "+status
+
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+
+
     }
 
-    private fun EditCurrentReport(description: String,ubication:String) {
+    private fun EditCurrentReport(description: String,ubication:String,status:String) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Editar reporte")
 
@@ -88,18 +110,62 @@ class ClikReportActivity : AppCompatActivity() {
         val inputField2 = EditText(this)
         inputField2.setText(ubication)
 
+
+
+        val radioButton = RadioButton(this)
+        radioButton.setText("Pendiente")
+        val radioButton2 = RadioButton(this)
+        radioButton2.setText("En atención")
+        val radioButton3 = RadioButton(this)
+        radioButton3.setText("Resuelto")
+        val radioGroup = RadioGroup(this)
+
+        if (status=="Pendiente"){
+            radioButton.isChecked = true
+        }else if (status=="En atención"){
+            radioButton2.isChecked = true
+        }else if (status=="Resuelto"){
+            radioButton3.isChecked = true
+        }
+
+
+        radioGroup.addView(radioButton)
+        radioGroup.addView(radioButton2)
+        radioGroup.addView(radioButton3)
+
         twoBoxes.addView(inputField)
         twoBoxes.addView(inputField2)
+        twoBoxes.addView(radioGroup)
 
 
 
         builder.setView(twoBoxes)
 
 
+
+        radioButton.setOnClickListener {
+            radioButton2.isChecked = false
+            radioButton3.isChecked = false
+            estado = "Pendiente"
+        }
+        radioButton2.setOnClickListener {
+            radioButton.isChecked = false
+            radioButton3.isChecked = false
+            estado = "En atención"
+        }
+        radioButton3.setOnClickListener {
+            radioButton2.isChecked = false
+            radioButton.isChecked = false
+            estado = "Resuelto"
+        }
+
+
         builder.setPositiveButton("Actualizar",object : DialogInterface.OnClickListener{
             override fun onClick(dialog: DialogInterface?, which: Int) {
                 ClickReportRef.child("description").setValue(inputField.text.toString())
                 ClickReportRef.child("ubicacion").setValue(inputField2.text.toString())
+                ClickReportRef.child("status").setValue(estado)
+               click_report_status.text = estado
                 Toast.makeText(this@ClikReportActivity,"Reporte actualizado correctamente...",Toast.LENGTH_LONG).show()
             }
 

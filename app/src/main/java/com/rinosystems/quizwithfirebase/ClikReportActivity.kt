@@ -57,9 +57,10 @@ class ClikReportActivity : AppCompatActivity() {
                 click_report_ubication.text = ubication
                 Picasso.get().load(image).into(click_report_image)
 
-                if (currentUserID.equals(databaseUserID)){
+                if (currentUserID.equals(databaseUserID)||ocupation.equals("Administrador de app")){
                     delete_report_button.visibility = View.VISIBLE
                     edit_repot_button.visibility = View.VISIBLE
+
 
                 }
 
@@ -87,6 +88,12 @@ class ClikReportActivity : AppCompatActivity() {
                 if (snapshot.exists()){
                     ocupation = snapshot.child("ocupation").getValue().toString()
                     click_report_status.text = "Status: "+status
+                    if (ocupation.equals("Administrador de app")){
+                        delete_report_button.visibility = View.VISIBLE
+                        edit_repot_button.visibility = View.VISIBLE
+
+
+                    }
 
                 }
             }

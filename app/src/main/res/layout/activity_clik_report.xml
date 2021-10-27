@@ -50,11 +50,13 @@
     <Button
             android:text="Editar reporte"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/edit_repot_button" android:layout_weight="1"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_repot_button" android:layout_weight="1"/>
     <Button
             android:text="Eliminar reporte"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/delete_report_button" android:layout_weight="1"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/delete_report_button" android:layout_weight="1"/>
 
 
 </LinearLayout>

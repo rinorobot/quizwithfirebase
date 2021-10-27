@@ -68,6 +68,7 @@ class ViewActivity : AppCompatActivity() {
 
         ref.child(examenKey!!).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+
                 val nombre_examen = snapshot.child("nombre_examen").getValue().toString()
                 label_question.text = nombre_examen
 

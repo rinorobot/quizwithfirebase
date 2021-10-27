@@ -53,6 +53,7 @@ class MisReportesActivity : AppCompatActivity() {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
+
                     ocupation = snapshot.child("ocupation").getValue().toString()
 
                     if (ocupation.equals("Administrador de app")){

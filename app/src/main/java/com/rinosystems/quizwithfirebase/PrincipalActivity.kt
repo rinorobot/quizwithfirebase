@@ -37,6 +37,7 @@ class PrincipalActivity : AppCompatActivity() {
 
     lateinit var mAuth: FirebaseAuth
     lateinit var UsersRef: DatabaseReference
+    lateinit var ReportsRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,6 +117,9 @@ class PrincipalActivity : AppCompatActivity() {
             SendUserToSettingsActivity()
         }
 
+
+        ReportsRef = FirebaseDatabase.getInstance().getReference("Reportes")
+
         principal_button_delete.setOnClickListener {
             val builder = androidx.appcompat.app.AlertDialog.Builder(this)
             builder.setTitle("¿Estás seguro que deseas eliminar tu cuenta?")
@@ -123,6 +127,40 @@ class PrincipalActivity : AppCompatActivity() {
             builder.setPositiveButton("Sí",DialogInterface.OnClickListener { dialogInterface, i ->
 
                 FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(null)
+
+
+                ReportsRef.addListenerForSingleValueEvent(object :ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (ds in snapshot.children){
+                         for (dsw in ds.children){
+                             if (dsw.key!!.contentEquals("uid")){
+                                 if (dsw.getValue().toString().contentEquals(FirebaseAuth.getInstance().currentUser!!.uid)){
+                                     ReportsRef.child(ds.key!!).setValue(null)
+                                 }
+                             }
+                         }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener {
 

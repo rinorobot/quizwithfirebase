@@ -26,14 +26,9 @@ import org.json.JSONObject
 
 class PrincipalActivity : AppCompatActivity() {
 
-    private val requestQueue: RequestQueue by lazy {
-        Volley.newRequestQueue(this.applicationContext)
-    }
 
-    //Para la notificación
-    private val FCM_API = "https://fcm.googleapis.com/fcm/send"
-    private val serverKey = "key=" + "AAAAO2HotNs:APA91bEwkUSlMrkFMNijyAcwJf4zAWwdVXciHhqzKlORF5ALWJsEtRHOmY0el5yTpFwe3reBYMRmiXA4167pWlUdnFnQvxnOhyF9HiGJnx4-M5KTguO-mFXw1KJrqTaTircNM3SJx1YN"
-    private val contentType = "application/json"
+
+
 
     lateinit var mAuth: FirebaseAuth
     lateinit var UsersRef: DatabaseReference
@@ -43,24 +38,7 @@ class PrincipalActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_principal)
 
-        //Para el envío de notificaciones
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/admins")
-        submit.setOnClickListener {
-            val topic = "/topics/admins"
-            val notification = JSONObject()
-            val notificationBody = JSONObject()
 
-            try {
-                notificationBody.put("title","Nuevo reporte")
-                notificationBody.put("message","Tienes un nuevo reporte")
-                notification.put("to",topic)
-                notification.put("data",notificationBody)
-                Log.e("TAG", "try")
-            }catch (e: JSONException){
-                Log.e("TAG", "onCreate: " + e.message)
-            }
-            sendNotification(notification)
-        }
 
 
 
@@ -127,6 +105,8 @@ class PrincipalActivity : AppCompatActivity() {
             builder.setPositiveButton("Sí",DialogInterface.OnClickListener { dialogInterface, i ->
 
                 FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(null)
+                FirebaseMessaging.getInstance().deleteToken()
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("/topics/admins")
 
 
                 ReportsRef.addListenerForSingleValueEvent(object :ValueEventListener{
@@ -151,17 +131,6 @@ class PrincipalActivity : AppCompatActivity() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
                 FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener {
 
                     if (it.isSuccessful){
@@ -169,7 +138,7 @@ class PrincipalActivity : AppCompatActivity() {
                         val intent= Intent(this,LoginActivity::class.java)
                         startActivity(intent)
                     }else{
-
+                        SendUserToLoginActivity()
                         Toast.makeText(this,"Para eliminar cuenta, vuelve a iniciar sesión. "+it.exception!!.message,Toast.LENGTH_LONG).show()
 
                     }
@@ -178,11 +147,17 @@ class PrincipalActivity : AppCompatActivity() {
 
             })
 
+
+
+
             builder.setNegativeButton("No",DialogInterface.OnClickListener { dialogInterface, i ->
 
             })
 
             builder.show()
+
+
+
         }
 
 
@@ -191,28 +166,7 @@ class PrincipalActivity : AppCompatActivity() {
 
     }
 
-    private fun   sendNotification(notification: JSONObject) {
-        Log.e("TAG", "sendNotification")
-        val jsonObjectRequest = object : JsonObjectRequest(FCM_API, notification,
-            Response.Listener<JSONObject> { response ->
-                Log.i("TAG", "onResponse: $response")
 
-            },
-            Response.ErrorListener {
-                Toast.makeText(this, "Request error", Toast.LENGTH_LONG).show()
-                Log.i("TAG", "onErrorResponse: Didn't work")
-            }) {
-
-            override fun getHeaders(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params["Authorization"] = serverKey
-                params["Content-Type"] = contentType
-                return params
-            }
-        }
-        requestQueue.add(jsonObjectRequest)
-
-    }
 
 
 
@@ -226,6 +180,8 @@ class PrincipalActivity : AppCompatActivity() {
         if (currentUser == null){
             SendUserToLoginActivity()
         }else{
+
+
             CheckUserExistence()
         }
 

@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
@@ -273,8 +274,11 @@ class SetupActivity : AppCompatActivity() {
                                     nip_pulso = snapshot.child("nip_admin").value.toString()
 
                                     if (nip_pulso.equals(nip)){
+                                        //Suscribo al admin a notificaciones
+                                        FirebaseMessaging.getInstance().subscribeToTopic("/topics/admins")
 
-                                       UsersRef.updateChildren(userMap).addOnCompleteListener {task ->
+
+                                        UsersRef.updateChildren(userMap).addOnCompleteListener {task ->
                                                 if (task.isSuccessful){
                                                     loadingBar.dismiss()
                                                     SendUserToMainActivity()

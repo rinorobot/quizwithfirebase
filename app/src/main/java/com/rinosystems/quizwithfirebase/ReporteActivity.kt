@@ -11,13 +11,20 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_reporte.*
+import org.json.JSONException
+import org.json.JSONObject
 
 class ReporteActivity : AppCompatActivity() {
 
@@ -42,6 +49,14 @@ class ReporteActivity : AppCompatActivity() {
     lateinit var downloadURL: String
     lateinit var current_user_id: String
 
+    //Para la notificación
+    private val requestQueue: RequestQueue by lazy {
+        Volley.newRequestQueue(this.applicationContext)
+    }
+    private val FCM_API = "https://fcm.googleapis.com/fcm/send"
+    private val serverKey = "key=" + "AAAAO2HotNs:APA91bEwkUSlMrkFMNijyAcwJf4zAWwdVXciHhqzKlORF5ALWJsEtRHOmY0el5yTpFwe3reBYMRmiXA4167pWlUdnFnQvxnOhyF9HiGJnx4-M5KTguO-mFXw1KJrqTaTircNM3SJx1YN"
+    private val contentType = "application/json"
+
 
 
 
@@ -65,8 +80,48 @@ class ReporteActivity : AppCompatActivity() {
 
         update_post_button.setOnClickListener {
             ValidatePostInfo()
+            EnviandoNotifiacionAAdministradores()
 
         }
+
+
+    }
+
+    private fun EnviandoNotifiacionAAdministradores() {
+
+        val topic = "/topics/admins"
+        val notification = JSONObject()
+        val notificationBody = JSONObject()
+
+        try {
+            notificationBody.put("title","Nuevo reporte")
+            notificationBody.put("message","Tienes un nuevo reporte")
+            notification.put("to",topic)
+            notification.put("data",notificationBody)
+            Log.e("TAG", "try")
+        }catch (e: JSONException){
+            Log.e("TAG", "onCreate: " + e.message)
+        }
+
+        val jsonObjectRequest = object : JsonObjectRequest(FCM_API, notification,
+            Response.Listener<JSONObject> { response ->
+
+
+            },
+            Response.ErrorListener {
+                Toast.makeText(this, "Request error", Toast.LENGTH_LONG).show()
+
+            }) {
+
+            override fun getHeaders(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["Authorization"] = serverKey
+                params["Content-Type"] = contentType
+                return params
+            }
+        }
+        requestQueue.add(jsonObjectRequest)
+
 
 
     }

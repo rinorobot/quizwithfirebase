@@ -94,8 +94,9 @@ class ReporteActivity : AppCompatActivity() {
         val notificationBody = JSONObject()
 
         try {
+            val mensaje =""+report_description.text.toString().subSequence(0,27) + "...En "+ reporte_lugar.text.toString().subSequence(0,15)
             notificationBody.put("title","Nuevo reporte")
-            notificationBody.put("message","Tienes un nuevo reporte")
+            notificationBody.put("message",mensaje)
             notification.put("to",topic)
             notification.put("data",notificationBody)
             Log.e("TAG", "try")

@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
@@ -45,80 +46,98 @@ class SetupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup)
 
-        loadingBar = ProgressDialog(this)
-
-
-
-        rbAdmin.setOnClickListener({
-                      setup_nip.visibility = View.VISIBLE
-            nip_status = true
-
-        })
-        rbDocente.setOnClickListener({
-            setup_nip.visibility = View.GONE
-            nip_status = false
-        }
-        )
-
-        rbEstudiante.setOnClickListener({
-            setup_nip.visibility = View.GONE
-            nip_status = false
-        })
-
-
-
-
-
-
-
-
-
         mAuth = FirebaseAuth.getInstance()
 
-        currentUserID = mAuth.currentUser!!.uid
-        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID)
-        UserProfileImageRef = FirebaseStorage.getInstance().getReference().child("Profile images")
+
+        val currentUser = mAuth.currentUser?.uid
+
+        if (currentUser!=null) {
+
+
+            loadingBar = ProgressDialog(this)
+
+
+
+            rbAdmin.setOnClickListener({
+                setup_nip.visibility = View.VISIBLE
+                nip_status = true
+
+            })
+            rbDocente.setOnClickListener({
+                setup_nip.visibility = View.GONE
+                nip_status = false
+            }
+            )
+
+            rbEstudiante.setOnClickListener({
+                setup_nip.visibility = View.GONE
+                nip_status = false
+            })
 
 
 
 
-        setup_information_button.setOnClickListener {
-            SaveAccountSetupInformation()
-        }
 
-        setup_profile_image.setOnClickListener {
-            val galleryIntent = Intent()
-            galleryIntent.setAction(Intent.ACTION_GET_CONTENT)
-            galleryIntent.setType("image/*")
-            startActivityForResult(galleryIntent, Gallery_Pick)
-        }
 
-        UsersRef.addValueEventListener(object : ValueEventListener{
 
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()){
+            currentUserID = mAuth.currentUser!!.uid
 
-                    if (snapshot.hasChild("profileimage")){
-                        val image = snapshot.child("profileimage").value.toString()
 
-                        Picasso.get().load(image).placeholder(R.drawable.ic_launcher_foreground).into(setup_profile_image)
-                    }else{
-                        Toast.makeText(this@SetupActivity,"Selecciona primero una imagen",Toast.LENGTH_LONG).show()
+            UsersRef =
+                FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID)
+            UserProfileImageRef =
+                FirebaseStorage.getInstance().getReference().child("Profile images")
+
+
+
+
+            setup_information_button.setOnClickListener {
+                SaveAccountSetupInformation()
+            }
+
+            setup_profile_image.setOnClickListener {
+                val galleryIntent = Intent()
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT)
+                galleryIntent.setType("image/*")
+                startActivityForResult(galleryIntent, Gallery_Pick)
+            }
+
+            UsersRef.addValueEventListener(object : ValueEventListener {
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+
+                        if (snapshot.hasChild("profileimage")) {
+                            val image = snapshot.child("profileimage").value.toString()
+
+                            Picasso.get().load(image).placeholder(R.drawable.ic_launcher_foreground)
+                                .into(setup_profile_image)
+                        } else {
+                            Toast.makeText(
+                                this@SetupActivity,
+                                "Selecciona primero una imagen",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+
                     }
-
-
-
 
                 }
 
-            }
-            override fun onCancelled(error: DatabaseError) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        this@SetupActivity,
+                        "Parece que hubo un error: "+error.message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
 
 
-        })
-
+            })
+        }else{
+            SendUserToLoginActivity()
+        }
 
     }
 
@@ -351,6 +370,13 @@ class SetupActivity : AppCompatActivity() {
 
 
 
+    private fun SendUserToLoginActivity() {
+        val loginIntent = Intent(this,LoginActivity::class.java)
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or  Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(loginIntent)
+        finish()
+
+    }
 
 
 

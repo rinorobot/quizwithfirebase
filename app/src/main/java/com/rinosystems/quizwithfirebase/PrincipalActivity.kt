@@ -28,27 +28,23 @@ class PrincipalActivity : AppCompatActivity() {
 
 
 
-
-
+    //Bandera para eliminar cuenta
+    var flagUser = false
     lateinit var mAuth: FirebaseAuth
     lateinit var UsersRef: DatabaseReference
     lateinit var ReportsRef: DatabaseReference
+    var userID =  ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_principal)
 
-
-
-
-
-
-
-
         mAuth = FirebaseAuth.getInstance()
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users")
 
         val currentUser = mAuth.currentUser?.uid
+        userID =  currentUser.toString()
+
 
         if (currentUser!=null) {
 
@@ -102,11 +98,9 @@ class PrincipalActivity : AppCompatActivity() {
             val builder = androidx.appcompat.app.AlertDialog.Builder(this)
             builder.setTitle("¿Estás seguro que deseas eliminar tu cuenta?")
             builder.setMessage("Los reportes y otros datos también se eliminarán")
+
             builder.setPositiveButton("Sí",DialogInterface.OnClickListener { dialogInterface, i ->
 
-                FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(null)
-                FirebaseMessaging.getInstance().deleteToken()
-                FirebaseMessaging.getInstance().unsubscribeFromTopic("/topics/admins")
 
 
                 ReportsRef.addListenerForSingleValueEvent(object :ValueEventListener{
@@ -123,27 +117,38 @@ class PrincipalActivity : AppCompatActivity() {
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
+
                     }
 
                 })
 
-
+                UsersRef.child(userID).removeValue()
 
 
                 FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener {
 
                     if (it.isSuccessful){
+                        FirebaseMessaging.getInstance().deleteToken()
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic("/topics/admins")
+
+
+
+
+
+
+
                         Toast.makeText(this,"Cuenta eliminada con éxito",Toast.LENGTH_LONG).show()
-                        val intent= Intent(this,LoginActivity::class.java)
-                        startActivity(intent)
-                    }else{
                         SendUserToLoginActivity()
+
+
+                    }else{
                         Toast.makeText(this,"Para eliminar cuenta, vuelve a iniciar sesión. "+it.exception!!.message,Toast.LENGTH_LONG).show()
 
                     }
 
                 }
+
+
 
             })
 
@@ -165,9 +170,6 @@ class PrincipalActivity : AppCompatActivity() {
 
 
     }
-
-
-
 
 
 
